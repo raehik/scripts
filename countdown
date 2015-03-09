@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+#
+# ayy lmao
+#
+
+reminder="$1"
+
+secs_now="$(date +%s)"
+
+time_unit="${2:(-1)}"
+
+if [[ "$time_unit" == "m" ]]; then
+    time_part="${2:0:-1}"
+    secs_to="$(($time_part * 60))"
+elif [[ "$time_unit" == "s" ]]; then
+    time_part="${2:0:-1}"
+    secs_to="$time_part"
+else
+    secs_to="$2"
+fi
+
+wait_until="$(($secs_now + $secs_to))"
+
+echo "$reminder"
+
+while [ "$wait_until" -ne "$(date +%s)" ]; do
+    echo -ne "\r\e[KSeconds left: $(($wait_until - $(date +%s)))"
+    sleep 1
+done
+
+# clear last line
+echo -ne "\r\e[K"
