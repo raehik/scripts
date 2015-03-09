@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+#
+# ayy lmao
+#
+
+session_name="reminder"
+
+if [[ $# -ne 2 ]]; then
+    tmux attach -t "$session_name"
+else
+    tmux new -s "$session_name" -d "countdown '$1' $2; while :; do ; mplayer -really-quiet $HOME/.beep.wav &>/dev/null ; sleep 0.5 ; done"
+fi
