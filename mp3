@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+#
+# Access my MP3 player and do things with it.
+#
+
+process-scrobble-log && playlists-to-mp3
