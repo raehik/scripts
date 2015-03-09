@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+#
+# ayy lmao
+#
+
+device="/dev/disk/by-uuid/8E0C-C4E0"
+mount="/mnt/mp3-sd"
+
+playlists_from="$HOME/.mpd/playlists"
+playlists_to="playlists"
+
+usage() {
+    cat <<EOF
+Usage: ${0##*/}
+Copy playlists TODO
+EOF
+}
+
+# Log an event.
+log() {
+    echo "${0##*/}: $1"
+}
+
+# Log an error (but don't exit).
+error() {
+    log "error: $1"
+}
+
+# Try to mount device.
+mount_device() {
+    sudo mount "$device" "$mount" -o uid=$UID,gid=$UID
+
+    # tell how it went
+    if [[ $? == 0 ]]; then
+        log "mounted succesfully"
+    else
+        error "could not mount device $device at mount point $mount"
+        exit 2
+    fi
+}
+
+# Try to unmount device.
+unmount_device() {
+    sudo umount "$device"
+
+    # tell how it went
+    if [[ $? == 0 ]]; then
+        log "unmounted successfully"
+    else
+        error "could not unmount $device"
+        exit 3
+    fi
+}
+
+tmp_dir="/tmp/playlists-$(date +%s)"
+cp -R "$playlists_from" "$tmp_dir"
+
+rocklist.py $tmp_dir/*
+
+mount_device
+rsync -rv "$tmp_dir" "$mount/$playlists_to"
+unmount_device
+
+rm -R "$tmp_dir"
