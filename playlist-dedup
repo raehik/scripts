@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+#
+# Remove duplicate lines from a file (i.e. duplicate songs from a
+# playlist).
+#
+
+for file in $@
+do
+    tmpfile="/tmp/${file##*/}"
+
+    awk '!seen[$0]++' "$file" > "$tmpfile"
+    md5_orig="$(md5sum "$file" | cut -d " " -f1)"
+    md5_new="$(md5sum "$tmpfile" | cut -d " " -f1)"
+
+    if [[ $md5_new != $md5_orig ]]; then
+        echo "--- $file"
+        diff "$tmpfile" "$file"
+        echo
+        mv "$tmpfile" "$file"
+    fi
+done
