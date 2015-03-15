@@ -7,4 +7,4 @@ user="$USER"
 server="86.28.170.125"
 port=6176
 
-ssh -p $port "$USER@$server"
+ssh -o TCPKeepAlive=yes -p $port "$USER@$server"
