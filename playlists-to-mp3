@@ -55,6 +55,10 @@ unmount_device() {
 tmp_dir="/tmp/playlists-$(date +%s)"
 cp -R "$playlists_from" "$tmp_dir"
 
+for file in "$tmp_dir"/*; do
+    mv "${file}" "${file%.*}.m3u8"
+done
+
 rocklist.py $tmp_dir/*
 
 mount_device
