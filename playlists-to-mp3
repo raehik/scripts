@@ -28,7 +28,7 @@ error() {
 
 # Try to mount device.
 mount_device() {
-    sudo mount "$device" "$mount" -o uid=$UID,gid=$UID
+    sudo mount "$device" "$mount" -o uid=$UID,gid=$UID,utf8
 
     # tell how it went
     if [[ $? == 0 ]]; then
