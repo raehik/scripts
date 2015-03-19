@@ -3,8 +3,8 @@
 # ayy lmao
 #
 
-site_dir="$HOME/projects/raehik.me"
-gen_dir="$HOME/projects/raehik.me-gen"
+site_dir="$HOME/projects/writing/raehik.me"
+gen_dir="$HOME/projects/writing/raehik.me-gen"
 
 cd "$site_dir"
 last_msg="$(git log -1 --pretty=%s)"
