@@ -1,0 +1,93 @@
+#!/usr/bin/env bash
+#
+# Copy music to MP3 player.
+#
+
+STDOUT="1"
+STDERR="2"
+
+FILENAME="${0##*/}"
+
+LOGGER="echo"
+LOG_PRE="$FILENAME"
+
+device="/dev/disk/by-uuid/8E0C-C4EO"
+mount="/mnt/mp3"
+
+music_from="$HOME"
+music_to="music"
+
+# Print usage and exit depending on given exit code.
+usage() {
+    exit_code=$1
+    # if argument was non-zero, pipe it to STDERR instead
+    if [[ $exit_code == 0 ]]; then
+        pipe=$STDOUT
+    else
+        pipe=$STDERR
+    fi
+    cat >&$pipe <<EOF
+Usage: $FILENAME [options]
+Copy music to MP3 player.
+
+  Options:
+    -v          be verbose
+    -h          display this help message
+
+Notes about default options/arguments, things you might wanna watch out
+for, etc.
+EOF
+    exit $exit_code
+}
+
+# If verbose, log an event.
+log() {
+    # if not verbose (i.e. $VERBOSE is empty), do nothing
+    test -z $VERBOSE && return
+    $LOGGER "$LOG_PRE: $1"
+}
+
+# Log an error. Doesn't exit.
+error() {
+    $LOGGER "$LOG_PRE: error: $1"
+}
+
+# Try to mount device.
+mount_device() {
+    sudo mount "$device" "$mount" -o uid=$UID,gid=$UID
+
+    # tell how it went
+    if [[ $? == 0 ]]; then
+        log "mounted succesfully"
+    else
+        error "could not mount device $device at mount point $mount"
+        exit 2
+    fi
+}
+
+# Try to unmount device.
+unmount_device() {
+    sudo umount "$device"
+
+    # tell how it went
+    if [[ $? == 0 ]]; then
+        log "unmounted successfully"
+    else
+        error "could not unmount $device"
+        exit 3
+    fi
+}
+
+while getopts ":vh" opt; do
+    case $opt in
+        h) usage 0 ;;
+        v) VERBOSE=1 ;;
+        *) error "-$OPTARG is not a valid option" ; usage 1 ;;
+    esac
+done
+
+
+
+mount_device
+rsync -rv "$music_from" "$mount/$music_to"
+unmount_device
