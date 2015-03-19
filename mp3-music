@@ -15,7 +15,7 @@ device="/dev/disk/by-uuid/8E0C-C4E0"
 mount="/mnt/mp3"
 
 music_from="$HOME/music"
-music_to="music"
+music_to=""
 
 # Print usage and exit depending on given exit code.
 usage() {
