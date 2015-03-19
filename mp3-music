@@ -11,7 +11,7 @@ FILENAME="${0##*/}"
 LOGGER="echo"
 LOG_PRE="$FILENAME"
 
-device="/dev/disk/by-uuid/8E0C-C4EO"
+device="/dev/disk/by-uuid/8E0C-C4E0"
 mount="/mnt/mp3"
 
 music_from="$HOME"
