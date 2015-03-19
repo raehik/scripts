@@ -14,7 +14,7 @@ LOG_PRE="$FILENAME"
 device="/dev/disk/by-uuid/8E0C-C4E0"
 mount="/mnt/mp3"
 
-music_from="$HOME"
+music_from="$HOME/music"
 music_to="music"
 
 # Print usage and exit depending on given exit code.
@@ -54,7 +54,7 @@ error() {
 
 # Try to mount device.
 mount_device() {
-    sudo mount "$device" "$mount" -o uid=$UID,gid=$UID
+    sudo mount "$device" "$mount" -o uid=$UID,gid=$UID,utf8
 
     # tell how it went
     if [[ $? == 0 ]]; then
