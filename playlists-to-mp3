@@ -59,6 +59,10 @@ for file in "$tmp_dir"/*; do
     mv "${file}" "${file%.*}.m3u8"
 done
 
+# de-duplicate all playlists
+playlist-dedup "$playlists_from"/*
+
+# make playlists suitable for Rockbox
 rocklist.py $tmp_dir/*
 
 mount_device
