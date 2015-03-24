@@ -13,7 +13,19 @@ prev_num="$(ls "$journal_dir" | sed -En "$regex_note_num" | tail -n1)"
 next_num=$(($prev_num + 1))
 
 cd "$journal_dir"
+
+# starting editing: start timer
+start_time="$(date "+%s")"
 new-from-template.py note "$next_num"
+
+# finished editing: end timer
+end_time="$(date "+%s")"
+
+editing_time=$(($end_time - $start_time))
+
+# do the git
 git add "$(date "+%F")-$(ezstring "Note $next_num").md"
-git commit -m "add daily note #$next_num"
+git commit -m "add daily note #$next_num
+
+Approx. writing time: ${editing_time}s"
 git push
