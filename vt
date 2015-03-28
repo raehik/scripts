@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+#
+# Bring up a temporary file to edit in your editor (assumed Vim in the
+# script name, lol).
+#
+
+tmp="/tmp"
+
+vim "$tmp/$(date "+%F_%T")-tmpnote.md"
