@@ -3,7 +3,7 @@
 # ayy lmao
 #
 
-device="/dev/disk/by-uuid/8E0C-C4E0"
+device="/dev/disk/by-uuid/2FB2-3CE7"
 mount="/mnt/mp3-sd"
 
 playlists_from="$HOME/.mpd/playlists"
