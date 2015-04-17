@@ -16,6 +16,9 @@ cd "$journal_dir"
 
 # starting editing: start timer
 start_time="$(date "+%s")"
+
+note_filename="$(date "+%F")-$(ezstring "Note $next_num").md"
+
 new-from-template.py note "$next_num"
 
 # finished editing: end timer
@@ -24,7 +27,7 @@ end_time="$(date "+%s")"
 editing_time=$(($end_time - $start_time))
 
 # do the git
-git add "$(date "+%F")-$(ezstring "Note $next_num").md"
+git add "$note_filename"
 git commit -m "add daily note #$next_num
 
 Approx. writing time: ${editing_time}s"
