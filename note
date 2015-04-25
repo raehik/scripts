@@ -3,15 +3,16 @@
 # Write a short note.
 #
 
-regex_note_num="s/.*-note-([0-9]+).md$/\1/p"
+REGEX_NOTE_NUM="s/.*-note-([0-9]+).md$/\1/p"
 
 journal_dir="$HOME/journal"
 
 
 
-prev_num="$(ls "$journal_dir" | sed -En "$regex_note_num" | sort -n | tail -n1)"
+prev_num="$(ls "$journal_dir" | sed -En "$REGEX_NOTE_NUM" | sort -n | tail -n1)"
 next_num=$(($prev_num + 1))
 
+# go to journal
 cd "$journal_dir"
 
 # starting editing: start timer
