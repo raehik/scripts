@@ -85,7 +85,7 @@ args = parser.parse_args()
 game_commands = {
     "higurashi": "wine %s/media/games/higurashi-when-they-cry/BGI.exe" % os.environ.get("HOME"),
     "tome4": "tome4",
-    "touhou9.5": "wine %s/media/games/touhou-09.5-shoot-the-bullet/th095e.exe" % os.environ.get("HOME"),
+    "touhou9.5": "cd %s/media/games/touhou-09.5-shoot-the-bullet && wine th095e.exe" % os.environ.get("HOME"),
 }
 
 game = args.game
