@@ -59,9 +59,13 @@ def run_command(args):
 
     return out.decode("utf-8").strip(), was_successful
 
-def start_game(command):
+def start_game(game_cmd, pre_cmd=None):
     cmd_switch_workspace = 'i3-msg "workspace 10"'
-    cmd_start_game = "nohup %s &> /dev/null &" % command
+    cmd_start_game = "nohup %s &> /dev/null &" % game_cmd
+
+    if pre_cmd:
+        cmd_start_game = pre_cmd + " && " + cmd_start_game
+        run_command(pre_cmd)
 
     log("Full game command: " + cmd_start_game)
 
@@ -85,7 +89,7 @@ args = parser.parse_args()
 game_commands = {
     "higurashi": "wine %s/media/games/higurashi-when-they-cry/BGI.exe" % os.environ.get("HOME"),
     "tome4": "tome4",
-    "touhou9.5": "cd %s/media/games/touhou-09.5-shoot-the-bullet && wine th095e.exe" % os.environ.get("HOME"),
+    "touhou9.5": ["cd %s/media/games/touhou-09.5-shoot-the-bullet" % os.environ.get("HOME"), "wine th095e.exe"],
 }
 
 game = args.game
@@ -101,6 +105,15 @@ else:
     matched_game = matches[0]
 
 log("Game matched: " + matched_game)
-log("Game command: " + game_commands[matched_game])
 
-start_game(game_commands[matched_game])
+if type(game_commands[matched_game]) is list:
+    pre_cmd = game_commands[matched_game][0]
+    game_cmd = game_commands[matched_game][1]
+    log("Game pre command: " + pre_cmd)
+else:
+    pre_cmd = None
+    game_cmd = game_commands[matched_game]
+
+log("Game command: " + game_cmd)
+
+start_game(game_cmd, pre_cmd)
