@@ -89,5 +89,5 @@ done
 
 
 mount_device
-rsync -rv "$music_from" "$mount/$music_to"
+rsync -azv "$music_from" "$mount/$music_to"
 unmount_device
