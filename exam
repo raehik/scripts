@@ -3,7 +3,7 @@
 # Write a short note.
 #
 
-REGEX_NOTE_NUM="s/.*-exam-([0-9]+).md$/\1/p"
+REGEX_NOTE_NUM="s/.*-exam-([0-9]+).*.md$/\1/p"
 
 journal_dir="$HOME/journal"
 
@@ -20,7 +20,7 @@ start_time="$(date "+%s")"
 
 note_filename="$(date "+%F")-$(ezstring "Exam $next_num: $1").md"
 
-new-from-template.py exam "$next_num" "$1"
+new-from-template.py exam "$next_num" "$1" "$2"
 
 # finished editing: end timer
 end_time="$(date "+%s")"
@@ -28,8 +28,10 @@ end_time="$(date "+%s")"
 editing_time=$(($end_time - $start_time))
 
 # do the git
+echo $note_filename
 git add "$note_filename"
-git commit -m "add exam #$next_num
+
+# edit the commit message (in case you want to cancel)
+git commit -em "add exam #$next_num
 
 Approx. writing time: ${editing_time}s"
-git push
