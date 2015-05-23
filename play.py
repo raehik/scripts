@@ -90,7 +90,8 @@ game_commands = {
     "higurashi": "wine %s/media/games/higurashi-when-they-cry/BGI.exe" % os.environ.get("HOME"),
     "tome4": "tome4",
     "touhou9.5": ["cd %s/media/games/touhou-09.5-shoot-the-bullet" % os.environ.get("HOME"), "wine th095e.exe"],
-    "final-fantasy-japan": "retroarch ~/media/games/nes/Final\ Fantasy\ \(Japan\).nes"
+    "final-fantasy-japan": "retroarch -L /lib/libretro/nestopia_libretro.so ~/media/games/nes/Final\ Fantasy\ \(Japan\).nes",
+    "chrono-trigger": "retroarch -L /lib/libretro/bsnes_balanced_libretro.so ~/media/games/snes/Chrono\ Trigger\ \(USA\).sfc",
 }
 
 game = args.game
