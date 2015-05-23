@@ -91,7 +91,7 @@ game_commands = {
     "tome4": "tome4",
     "touhou9.5": ["cd %s/media/games/touhou-09.5-shoot-the-bullet" % os.environ.get("HOME"), "wine th095e.exe"],
     "final-fantasy-japan": "retroarch -L /lib/libretro/nestopia_libretro.so ~/media/games/nes/Final\ Fantasy\ \(Japan\).nes",
-    "chrono-trigger": "retroarch -L /lib/libretro/bsnes_balanced_libretro.so ~/media/games/snes/Chrono\ Trigger\ \(USA\).sfc",
+    "chrono-trigger": "retroarch -L /lib/libretro/snes9x_libretro.so ~/media/games/snes/Chrono\ Trigger\ \(USA\).sfc",
 }
 
 game = args.game
