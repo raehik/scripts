@@ -32,6 +32,6 @@ echo $note_filename
 git add "$note_filename"
 
 # edit the commit message (in case you want to cancel)
-git commit -em "add exam #$next_num
+git commit -em "add exam #$next_num $1
 
 Approx. writing time: ${editing_time}s"
