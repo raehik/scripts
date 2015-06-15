@@ -14,4 +14,4 @@ playlist="best"
 mpc playlist -f "%file%" "$playlist" | shuf -n1 | mpc insert
 
 # play that song
-mpc next
+#mpc next
