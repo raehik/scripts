@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+#
+# Render a Tex file.
+#
+
+renderer="pdflatex"
+renderer_options="-shell-escape"
+
+error() {
+    echo "${0##*/}: error: $1"
+    exit 1
+}
+
+if [[ $# != 1 ]]; then
+    error "expected exactly 1 argument"
+fi
+
+build_dir="build"
+bin_dir="bin"
+
+# set build/bin directories to ./ if they don't exist
+if [[ ! -d "$build_dir" ]]; then
+    build_dir="."
+fi
+
+if [[ ! -d "$bin_dir" ]]; then
+    bin_dir="."
+fi
+
+$renderer $renderer_options -output-directory="$build_dir" "$1"
+mv build/*.pdf "$bin_dir"
