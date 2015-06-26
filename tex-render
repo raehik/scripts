@@ -28,4 +28,7 @@ if [[ ! -d "$bin_dir" ]]; then
 fi
 
 $renderer $renderer_options -output-directory="$build_dir" "$1"
-mv build/*.pdf "$bin_dir"
+
+if [[ "$build_dir" != "$bin_dir" ]]; then
+    mv "$build_dir"/*.pdf "$bin_dir"
+fi
