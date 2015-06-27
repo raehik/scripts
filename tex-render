@@ -3,8 +3,12 @@
 # Render a Tex file.
 #
 
-renderer="pdflatex"
-renderer_options="-shell-escape"
+#renderer="pdflatex"
+#renderer_options="-shell-escape"
+
+# check ~/.latexmkrc for options
+renderer="latexmk"
+renderer_options=""
 
 error() {
     echo "${0##*/}: error: $1"
