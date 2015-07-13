@@ -1,0 +1,90 @@
+#!/usr/bin/env bash
+#
+# ayy lmao
+#
+
+device="/dev/disk/by-uuid/2FB2-3CE7"
+mount="/mnt/mp3-sd"
+
+lyrics_from="$HOME/.mpd/lyrics"
+lyrics_to="lyrics"
+
+usage() {
+    cat <<EOF
+Usage: ${0##*/}
+Copy lyrics to Rockbox.
+EOF
+}
+
+# Log an event.
+log() {
+    echo "${0##*/}: $1"
+}
+
+# Log an error (but don't exit).
+error() {
+    log "error: $1"
+}
+
+# Try to mount device.
+mount_device() {
+    sudo mount "$device" "$mount" -o uid=$UID,gid=$UID,utf8
+
+    # tell how it went
+    if [[ $? == 0 ]]; then
+        log "mounted succesfully"
+    else
+        error "could not mount device $device at mount point $mount"
+        exit 2
+    fi
+}
+
+# Try to unmount device.
+unmount_device() {
+    sudo umount "$device"
+
+    # tell how it went
+    if [[ $? == 0 ]]; then
+        log "unmounted successfully"
+    else
+        error "could not unmount $device"
+        exit 3
+    fi
+}
+
+tmp_dir="/tmp/rockbox-lyrics-$(date +%s)"
+mkdir "$tmp_dir"
+
+# copy lyrics to temp dir
+cp -R "$lyrics_from"/* "$tmp_dir"
+
+# remove extension (easier to use files later)
+for file in "$tmp_dir"/*; do
+    mv "${file}" "${file%.*}"
+done
+
+# make files LRC-compatible
+#./rocklyrics.py "$tmp_dir"/*
+
+mount_device
+
+for file in $tmp_dir/*; do
+    song="${file##*/}"
+
+    artist="$(awk -F " - " '{print $1}' <<< "$song")"
+    title="$(awk -F " - " '{print $2}' <<< "$song")"
+
+    mv "$file" "$tmp_dir/${title}.txt"
+
+    #match="$(mpc search artist "$artist" title "$title" | head -n1)"
+    #if [[ "$match" ]]; then
+    #    # copy to matching file + .txt
+    #    cp "$file" "$mount/music/${match%.*}.txt"
+    #fi
+done
+
+cp -R "$tmp_dir" "$mount/$lyrics_to"
+
+unmount_device
+
+rm -R "$tmp_dir"

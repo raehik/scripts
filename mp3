@@ -3,4 +3,8 @@
 # Access my MP3 player and do things with it.
 #
 
-process-scrobble-log && playlists-to-mp3
+set -e
+
+process-scrobble-log
+playlists-to-mp3
+lyrics-to-mp3
