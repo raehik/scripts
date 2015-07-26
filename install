@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+#
+# Install all the scripts to ~/bin (via symlinking).
+#
+
+target_dir="$HOME/bin"
+relative_to="$HOME"
+current_relative_dir="projects/coding/scripts"
+
+if [[ ! -e "$target_dir" ]]; then
+    mkdir "$target_dir"
+fi
+
+for script in *; do
+    # skip if not a script (= special file/dir or this file)
+    case "$script" in
+        "README.md") continue ;;
+        "old") continue ;;
+        "${0##*/}") continue ;;
+    esac
+
+    ln -s "../${current_relative_dir}/$script" "$target_dir"
+done
