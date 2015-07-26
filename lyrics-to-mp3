@@ -83,7 +83,8 @@ for file in $tmp_dir/*; do
     #fi
 done
 
-cp -R "$tmp_dir" "$mount/$lyrics_to"
+rm -rf "$mount/$lyrics_to"/*
+cp -R "$tmp_dir"/* "$mount/$lyrics_to"
 
 unmount_device
 
