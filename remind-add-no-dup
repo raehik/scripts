@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+#
+# Short description of the program/script's operation/function.
+#
+
+remind_file="$HOME/.reminders"
+
+# must include full line (REM at start)
+reminder_to_add="$1"
+
+if ! grep -Fxq "$reminder_to_add" "$remind_file"; then
+    echo "$reminder_to_add" >> "$remind_file"
+fi
