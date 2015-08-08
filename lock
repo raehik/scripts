@@ -3,4 +3,7 @@
 # Lock your X session using i3lock.
 #
 
-i3lock -utdI 0 --color "000000"
+i3_conf_dir="$HOME/.config/i3"
+lock_img="lockscreen.png"
+
+i3lock -utdI 0 -i "$i3_conf_dir/$lock_img"
