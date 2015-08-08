@@ -60,7 +60,9 @@ def run_command(args):
     return out.decode("utf-8").strip(), was_successful
 
 def start_game(game_cmd, pre_cmd=None):
-    cmd_switch_workspace = 'i3-msg "workspace 10"'
+    workspace_num = "9"
+
+    cmd_switch_workspace = 'i3-msg "workspace ' + workspace_num + '"'
     cmd_start_game = "nohup %s &> /dev/null &" % game_cmd
 
     if pre_cmd:
