@@ -19,4 +19,4 @@ case "$1" in
         ;;
 esac
 
-"$HOME/.fehbg"
+"$HOME/.assets/backgrounds/set-desktop-background"
