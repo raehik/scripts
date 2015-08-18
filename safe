@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+#
+# Open/close your safe.
+#
+
+safe_enc="$HOME/media/.safe"
+safe_mount="$HOME/media/safe"
+
+if [[ $# < 1 ]]; then
+    echo "${0##*/}: error: argument required (open or close)"
+    exit 1
+fi
+
+if [[ "$1" == "open" ]]; then
+    # if directory not empty, encfs will fail, so fail early
+    if [[ -n "$(ls "$safe_mount")" ]]; then
+        echo "${0##*/}: error: mount point not empty"
+        exit 2
+    fi
+    encfs "$safe_enc" "$safe_mount"
+elif [[ "$1" == "close" ]]; then
+    fusermount -u "$safe_mount"
+else
+    echo "${0##*/}: error: unknown command"
+fi
