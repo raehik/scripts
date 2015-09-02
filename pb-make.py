@@ -4,6 +4,7 @@
 #
 
 import sys
+import os
 import argparse
 import json
 import requests
@@ -38,11 +39,9 @@ def log(message):
         return
     log_message(message)
 
-"""Log an error. If given a 2nd argument, exit using that error code."""
-def error(message, exit_code=None):
+"""Log an error."""
+def error(message):
     log_message("error: " + message, sys.stderr)
-    if exit_code:
-        sys.exit(exit_code)
 
 
 
@@ -72,7 +71,13 @@ api_call_url = "/api/predictions"
 request_url = host + api_call_url
 
 #login = "raehik"
-api_key = ""
+api_key_file = os.getenv("HOME") + "/.pb_key"
+
+if os.path.exists(api_key_file):
+    api_key = open(api_key_file).readline().strip()
+else:
+    error("API key file does not exist (%s)" % api_key_file)
+    sys.exit(1)
 
 data = {
     "api_token": api_key,
