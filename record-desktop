@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+#
+# Short description of the program/script's operation/function.
+#
+
+screen_size=1366x768
+framerate=25
+
+ffmpeg -f pulse -ac 2 -i default \
+       -f x11grab -i :0.0 -s $screen_size -r $framerate \
+       -c:a copy -vcodec libx264 \
+       -preset ultrafast -crf 0 -threads 0 \
+       desktop-record.mkv
+
+echo "Look here: http://ubuntuforums.org/showthread.php?p=8746719#post8746719"
