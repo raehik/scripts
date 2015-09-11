@@ -8,24 +8,26 @@ print_cmd="printf --"
 # fortune: use all + my custom quotes
 fortune_cmd="fortune all $HOME/.assets/fortune"
 
+indent_str="  | "
+
 colour(){
-    clr="\e["
+    clr=$'\e'
     case $1 in
-        red) clr="${clr}0;31m" ;;
-        red_b) clr="${clr}1;31m" ;;
-        green) clr="${clr}0;32m" ;;
-        green_b) clr="${clr}1;32m" ;;
-        yellow) clr="${clr}0;33m" ;;
-        yellow_b) clr="${clr}1;33m" ;;
-        blue) clr="${clr}0;34m" ;;
-        blue_b) clr="${clr}1;34m" ;;
-        purple) clr="${clr}0;35m" ;;
-        purple_b) clr="${clr}1;35m" ;;
-        cyan) clr="${clr}0;36m" ;;
-        cyan_b) clr="${clr}1;36m" ;;
-        grey) clr="${clr}0;37m" ;;
-        white) clr="${clr}1;37m" ;;
-        reset) clr="${clr}0m" ;;
+        red) clr="${clr}[0;31m" ;;
+        red_b) clr="${clr}[1;31m" ;;
+        green) clr="${clr}[0;32m" ;;
+        green_b) clr="${clr}[1;32m" ;;
+        yellow) clr="${clr}[0;33m" ;;
+        yellow_b) clr="${clr}[1;33m" ;;
+        blue) clr="${clr}[0;34m" ;;
+        blue_b) clr="${clr}[1;34m" ;;
+        purple) clr="${clr}[0;35m" ;;
+        purple_b) clr="${clr}[1;35m" ;;
+        cyan) clr="${clr}[0;36m" ;;
+        cyan_b) clr="${clr}[1;36m" ;;
+        grey) clr="${clr}[0;37m" ;;
+        white) clr="${clr}[1;37m" ;;
+        reset) clr="${clr}[0m" ;;
         *) clr="" ;;
     esac
 
@@ -40,11 +42,6 @@ colour green
 $print_cmd "$(hostname)\n"
 
 $print_cmd "\n"
-while IFS='' read -r line; do
-    colour cyan
-    $print_cmd "  | "
-    colour yellow_b
-    $print_cmd "$line\n"
-done <<< "$($fortune_cmd)"
+$fortune_cmd | sed "s/^/$(colour cyan)${indent_str}$(colour yellow_b)$line/"
 
 colour reset
