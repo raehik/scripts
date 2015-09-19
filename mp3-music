@@ -89,5 +89,5 @@ done
 
 
 mount_device
-rsync -azv "$music_from" "$mount/$music_to"
+rsync -av --ignore-existing "$music_from" "$mount/$music_to"
 unmount_device
