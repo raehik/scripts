@@ -29,7 +29,7 @@ check_repo_for_x_years() {
             --since="$cur_date_since" \
             --before="$cur_date_before" \
             --date=short \
-            --pretty=tformat:"%cd - %h - %s")"
+            --pretty=tformat:"%cd (%h) %s")"
         if [[ "$cur_logs" ]]; then
             # logs weren't empty, so we have something to print
             have_printed=true
@@ -52,7 +52,7 @@ else
 fi
 
 if [[ "$2" ]]; then
-    date_before="$(date --date="$1" +%Y-%m-%d)"
+    date_before="$(date --date="$2" +%Y-%m-%d)"
 else
     date_before="$(date --date="today + 1 day" +%Y-%m-%d)"
 fi
