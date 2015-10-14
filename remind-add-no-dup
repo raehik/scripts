@@ -5,9 +5,17 @@
 
 remind_file="$HOME/.reminders"
 
-# must include full line (REM at start)
-reminder_to_add="$1"
+# date to test
+test_date="$1"
 
-if ! grep -Fxq "$reminder_to_add" "$remind_file"; then
-    echo "$reminder_to_add" >> "$remind_file"
+if grep -E "^[0-9]{4}-[0-9]{2}-[0-9]{2}((@| AT )[0-9]{2}:[0-9]{2})?$" <<< "$test_date"; then
+    echo "Success"
+    # date matches regex; now check if it already exists in my reminders file
+
+    remind_msg="REM $test_date MSG ${@:2}"
+    if ! grep -Fxq "$remind_msg" "$remind_file"; then
+        echo "$remind_msg" >> "$remind_file"
+    fi
+else
+    exit 1
 fi
