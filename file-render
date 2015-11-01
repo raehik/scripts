@@ -17,8 +17,12 @@ render_markdown() {
 render_tex() {
     main_tex="main.tex"
 
-    # if there's a main.tex file, override and render that
     if [[ -f "$main_tex" ]]; then
+        # if there's a main.tex file, override and render that
+        tex-render "$main_tex"
+    elif [[ -f "../$main_tex" ]]; then
+        # if we're in project/any-dir/file.tex, render project/main.tex instead
+        cd ..
         tex-render "$main_tex"
     else
         tex-render "$1"
