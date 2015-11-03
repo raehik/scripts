@@ -3,7 +3,7 @@
 # Open/create a list.
 #
 
-list_dir="$HOME/.assets/lists"
+list_dir="$HOME/.local/share/lists"
 ext=".md"
 
 if [[ -n "$1" ]]; then
