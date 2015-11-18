@@ -17,6 +17,7 @@ for script in *; do
     # skip if not a script (= special file/dir or this file)
     case "$script" in
         "README.md") continue ;;
+        "LICENSE") continue ;;
         "old") continue ;;
         "${0##*/}") continue ;;
     esac
