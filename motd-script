@@ -10,7 +10,7 @@ fortune_cmd="fortune all $HOME/.assets/fortune"
 
 indent_str="  | "
 
-colour(){
+colour() {
     clr=$'\e'
     case $1 in
         red) clr="${clr}[0;31m" ;;
@@ -34,12 +34,15 @@ colour(){
     $print_cmd "$clr"
 }
 
-colour cyan_b
-figlet "$(source /etc/os-release; echo "$NAME")"
-colour cyan
-$print_cmd "Hostname: "
-colour green
-$print_cmd "$(hostname)\n"
+print_with_colour() {
+    colour $1
+    $print_cmd "$2"
+    colour reset
+}
+
+print_with_colour cyan_b "$(figlet "$(source /etc/os-release; echo "$NAME")")\n"
+print_with_colour cyan "Hostname: "
+print_with_colour green "$(hostname)\n"
 
 $print_cmd "\n"
 $fortune_cmd | sed "s/^/$(colour cyan)${indent_str}$(colour yellow_b)$line/"
