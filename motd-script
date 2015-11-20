@@ -6,7 +6,7 @@
 print_cmd="printf --"
 
 # fortune: use all + my custom quotes
-fortune_cmd="fortune all $HOME/.assets/fortune"
+fortune_cmd="fortune all $HOME/.assets/fortunes"
 
 indent_str="  | "
 
