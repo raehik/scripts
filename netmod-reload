@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 #
-# Reload a driver and restart a netctl profile.
+# #Reload a driver and restart a netctl profile.
+# Restart netctl-auto.
 #
 
-driver="rtl8723be"
-current_profile="$(netctl list | grep "^\*" | cut -d ' ' -f 2)"
+#driver="rtl8723be"
+interface="wlp4s0"
+#current_profile="$(netctl list | grep "^\*" | cut -d ' ' -f 2)"
 
-sudo modprobe -r "$driver" && sudo modprobe "$driver" && sudo netctl restart "$current_profile"
+#sudo modprobe -r "$driver" && sudo modprobe "$driver" && sudo netctl restart "$current_profile"
+sudo systemctl restart netctl-auto@"$interface"
