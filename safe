@@ -3,23 +3,36 @@
 # Open/close your safe.
 #
 
-safe_enc="$HOME/media/.safe"
-safe_mount="$HOME/media/safe"
+safe_enc_pre="$HOME/media/.safe"
+safe_mount_pre="$HOME/media/safe"
 
-if [[ $# < 1 ]]; then
-    echo "${0##*/}: error: argument required (open or close)"
-    exit 1
-fi
+safe_id="$1"
+safe_cmd="$2"
 
-if [[ "$1" == "open" ]]; then
+safe_open() {
+    local safe_enc="${safe_enc_pre}-$1"
+    local safe_mount="${safe_mount_pre}-$1"
+
     # if directory not empty, encfs will fail, so fail early
     if [[ -n "$(ls "$safe_mount")" ]]; then
         echo "${0##*/}: error: mount point not empty"
         exit 2
     fi
     encfs "$safe_enc" "$safe_mount"
-elif [[ "$1" == "close" ]]; then
+}
+
+safe_close() {
+    local safe_mount="${safe_mount_pre}-$1"
     fusermount -u "$safe_mount"
-else
-    echo "${0##*/}: error: unknown command"
+}
+
+if [[ $# < 2 ]]; then
+    echo "${0##*/}: error: argument required (open or close)"
+    exit 1
 fi
+
+case "$safe_cmd" in
+    "open") safe_open "$safe_id" ;;
+    "close") safe_close "$safe_id" ;;
+    *) "${0##*/}: error: unknown command" ;;
+esac
