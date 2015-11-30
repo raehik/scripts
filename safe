@@ -3,8 +3,8 @@
 # Open/close your safe.
 #
 
-safe_enc_pre="$HOME/media/.safe"
-safe_mount_pre="$HOME/media/safe"
+safe_enc_pre="$HOME/data/.safe"
+safe_mount_pre="$HOME/data/safe"
 
 safe_id="$1"
 safe_cmd="$2"
