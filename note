@@ -6,6 +6,8 @@
 REGEX_NOTE_NUM="s/.*-note-([0-9]+).md$/\1/p"
 
 journal_dir="$HOME/journal"
+template_exec="new"
+template_type="note"
 
 
 
@@ -20,7 +22,7 @@ start_time="$(date "+%s")"
 
 note_filename="$(date "+%F")-$(ezstring "Note $next_num").md"
 
-new-from-template.py note "$next_num"
+$template_exec "$template_type" "$next_num"
 
 # finished editing: end timer
 end_time="$(date "+%s")"
