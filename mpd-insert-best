@@ -4,7 +4,8 @@
 # playlist.
 #
 # This is expected to be called as a "this is boring, switch to a good
-# song" script. I have it bound to $mod+XF86AudioNext ($mod = Win key)
+# song" script. I have it bound to $mod+XF86AudioNext ($mod = Win key), which
+# means Win+Fn+F12 on my laptop keyboard.
 #
 
 playlist="best"
