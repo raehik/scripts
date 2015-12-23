@@ -23,7 +23,7 @@ done
 
 
 
-if [ -z "$@" ]; then
+if [[ $# == 0 ]]; then
     echo "${0##*/}: error: no arguments given"
     exit 1
 fi
