@@ -5,22 +5,33 @@
 
 archive_dir="$HOME/archive"
 
-if [[ $# != 1 ]]; then
-    echo "error: expected 1 argument (got $#)"
+if [[ $# == 0 ]]; then
+    echo "error: expected at least 1 argument"
     exit 1
+fi
+
+if [[ $# > 2 ]]; then
+    echo "error: too many arguments (expected 1 or 2)"
+    exit 2
+fi
+
+if [[ $2 ]]; then
+    dest_archive="$2"
+else
+    dest_archive="$1"
 fi
 
 if [[ ! -e "$1" ]]; then
     echo "error: file/directory specified does not exist ($1)"
-    exit 2
+    exit 3
 fi
 
 file_to_archive="$1"
-archive="$archive_dir/$(date +%Y-%m-%d)-${file_to_archive##*/}.tar.xz"
+archive="$archive_dir/$(date +%Y-%m-%d)-${dest_archive##*/}.tar.xz"
 
 if [[ -e "$archive" ]]; then
     echo "error: output archive file already exists ($archive)"
-    exit 3
+    exit 4
 fi
 
 XZ_OPT=-9 tar -Jcvpf "$archive" "$file_to_archive"
@@ -29,5 +40,5 @@ if [[ $? == 0 ]]; then
     echo "Archived $file_to_archive to $archive"
 else
     echo "error: something went wrong while tarring"
-    exit 4
+    exit 5
 fi
