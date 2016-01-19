@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+#
+# Short description of the program/script's operation/function.
+#
+
+infile="$1"
+
+format="ogg"
+quality="6" # 3-6 suggested, let's go with 6
+outfile="${1%.*}.${format}"
+
+ffmpeg -i "$infile" -q:a $quality "$outfile"
