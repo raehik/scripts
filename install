@@ -14,11 +14,13 @@ if [[ ! -e "$target_dir" ]]; then
 fi
 
 for script in *; do
-    # skip if not a script (= special file/dir or this file)
+    # skip if that file is a ~~spy~~ directory
+    [[ -d "$script" ]] && continue
+
+    # skip if file is special (README, license, this file)
     case "$script" in
         "README.md") continue ;;
         "LICENSE") continue ;;
-        "old") continue ;;
         "${0##*/}") continue ;;
     esac
 
