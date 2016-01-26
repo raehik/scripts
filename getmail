@@ -22,10 +22,11 @@ while true; do
         notify-send "New mail!" -u low
 
         # filter each new mail with procmail
-        for file in "$new_mail_dir"/*; do
-            # -p keeps env. vars. so we have the DBUS session address etc.
-            procmail -p < "$file"
-        done
+        # 2016-01-23: DISABLED because I don't need it at the moment
+        #for file in "$new_mail_dir"/*; do
+        #    # -p keeps env. vars. so we have the DBUS session address etc.
+        #    procmail -p < "$file"
+        #done
     fi
 
 
