@@ -4,10 +4,10 @@
 #
 
 screen_size=1366x768
-framerate=25
+framerate=60
 
 ffmpeg -f pulse -ac 2 -i default \
-       -f x11grab -i :0.0 -s $screen_size -r $framerate \
+       -f x11grab -s $screen_size -r $framerate -i :0.0\
        -c:a copy -vcodec libx264 \
        -preset ultrafast -crf 0 -threads 0 \
        desktop-record.mkv
