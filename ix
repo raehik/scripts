@@ -7,8 +7,8 @@
 #     ix -i ID hello.txt        # replace ID, if you have permission.
 #     ix -d ID
 
-# NOTE: prepending -0 option to use HTTP 1.0 because otherwise, curl get stuck
-# -- but why???
+# FIXME: have to prepend -0 option to use HTTP 1.0 because otherwise, curl gets
+#        stuck -- but why???
 
 ix() {
     local opts
