@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+#
+# Short description of the program/script's operation/function.
+#
+
+i3-msg workspace 8
+sleep 0.1
+run-bg urxvt -cd ~/school/cs/comp4/comp4-report
+run-bg zathura ~/school/cs/comp4/docs/project-log.pdf
