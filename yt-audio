@@ -9,4 +9,4 @@ format="ogg"
 quality="6" # 3-6 suggested, let's go with 6
 outfile="${1%.*}.${format}"
 
-ffmpeg -i "$infile" -q:a $quality "$outfile"
+ffmpeg -i "$infile" -vn -q:a $quality "$outfile"
