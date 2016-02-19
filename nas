@@ -9,7 +9,7 @@ nas_server="NAS"
 nas_share="Ben"
 nas_user="ben"
 
-mount_nas() {
+mount_user() {
     nas_ip="$(nmblookup "$nas_server" 2>&1 | tail -n1 | cut -d ' ' -f 1)"
     read -s -p "NAS user password: " nas_password
     echo
@@ -17,12 +17,17 @@ mount_nas() {
         "//$nas_ip/$nas_share" "$mount_dir"
 }
 
-umount_nas() {
+mount_public() {
+    smbnetfs "$mount_dir"
+}
+
+umount_general() {
     sudo umount "$mount_dir"
 }
 
 case "$1" in
-    mount) mount_nas ;;
-    umount) umount_nas ;;
-    *) echo "commands are mount and umount" ; exit 1 ;;
+    user) mount_user ;;
+    umount) umount_general ;;
+    public) mount_public ;;
+    *) echo "commands are user, public, umount" ; exit 1 ;;
 esac
