@@ -7,8 +7,8 @@
 #     ix -i ID hello.txt        # replace ID, if you have permission.
 #     ix -d ID
 
-# FIXME: have to prepend -0 option to use HTTP 1.0 because otherwise, curl gets
-#        stuck -- but why???
+# NOTE: at one point, I had to prepend -0 option to curl to use HTTP 1.0 because
+#       otherwise curl gets stuck. Not sure why, but it's fine without now.
 
 ix() {
     local opts
@@ -32,7 +32,7 @@ ix() {
         }
         echo "^C to cancel, ^D to send."
     }
-    curl -0 $opts -F f:1='<-' $* ix.io/$id
+    curl $opts -F f:1='<-' $* ix.io/$id
 }
 
 ix $*
