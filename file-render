@@ -3,18 +3,16 @@
 # Render a file by guessing its markup from the extension.
 #
 
-pre="render"
-
-error() {
-    echo "$1"
+_error() {
+    >&2 echo "$1"
     exit 1
 }
 
-render_markdown() {
+_render_md() {
     markdown-render -o "$1"
 }
 
-render_tex() {
+_render_tex() {
     main_tex="main.tex"
 
     if [[ -f "$main_tex" ]]; then
@@ -29,17 +27,22 @@ render_tex() {
     fi
 }
 
+_render_dot() {
+    dot-render -o "$1"
+}
+
 if [[ $# != 1 ]]; then
-    error "should have exactly 1 argument (file to render)"
+    _error "should have exactly 1 argument (file to render)"
 fi
 
 file="$1"
 ext="${file##*.}"
 
 case "$ext" in
-    md) ft="markdown" ;;
+    md) ft=$ext ;;
     tex) ft=$ext ;;
-    *) ft="markdown" ;; # assume markdown if extension is not recognised
+    gv) ft=dot ;;
+    *) ft=md ;; # assume markdown if extension is not recognised
 esac
 
-render_$ft "$file"
+_render_$ft "$file"
