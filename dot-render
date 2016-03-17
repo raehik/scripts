@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+#
+# Render & view a DOT file.
+#
+
+fmt="png"
+
+STDOUT="1"
+STDERR="2"
+FILENAME="${0##*/}"
+LOGGER="echo"
+LOG_PRE="$FILENAME"
+
+
+# Print usage and exit depending on given exit code.
+_usage() {
+    exit_code=$1
+    # if argument was non-zero, pipe it to STDERR instead
+    if [[ $exit_code == 0 ]]; then
+        pipe=$STDOUT
+    else
+        pipe=$STDERR
+    fi
+    cat >&$pipe <<EOF
+Usage: ${0##*/} [options] [FILE]
+Render a DOT file to a temporary PNG file & optionally view.
+
+  Options:
+    -o          open the rendered file
+    -h          display this help message
+EOF
+	exit $exit_code
+}
+
+# If verbose, log an event.
+_log() {
+    # if not verbose (i.e. $VERBOSE is empty), do nothing
+    test -z $VERBOSE && return
+    $LOGGER "$LOG_PRE: $1"
+}
+
+# Log an error. If given a 2nd argument, exit with it as the exit code.
+_error() {
+    $LOGGER "$LOG_PRE: error: $1" >&$STDERR
+    if [[ $2 ]]; then
+        exit $2
+    fi
+}
+
+while getopts ":ho" opt; do
+    case $opt in
+        h) _usage 0 ;;
+        o) open_file=true ;;
+		*) _error "-$OPTARG is not a valid option" ; usage 1 ;;
+    esac
+done
+shift $((OPTIND-1))
+
+
+
+if [[ $# != 1 ]]; then
+    _error "expected exactly 1 argument" 2
+fi
+
+outfile=$(mktemp --suffix=".$fmt")
+dot "$1" -T "$fmt" -o "$outfile"
+
+$FILE_OPENER "$outfile"
