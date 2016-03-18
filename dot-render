@@ -4,65 +4,70 @@
 #
 
 fmt="png"
+dot_renderer="dot"
 
-STDOUT="1"
-STDERR="2"
-FILENAME="${0##*/}"
-LOGGER="echo"
-LOG_PRE="$FILENAME"
+_BASHPLATE_DIR="$HOME/.local/share/bashplate"
+source "$_BASHPLATE_DIR/bashplate.sh"
 
-
-# Print usage and exit depending on given exit code.
-_usage() {
-    exit_code=$1
-    # if argument was non-zero, pipe it to STDERR instead
-    if [[ $exit_code == 0 ]]; then
-        pipe=$STDOUT
-    else
-        pipe=$STDERR
-    fi
-    cat >&$pipe <<EOF
-Usage: ${0##*/} [options] [FILE]
-Render a DOT file to a temporary PNG file & optionally view.
+_usage="\
+Usage: $_FILENAME [options] FILE
+Render a DOT file to a PNG & optionally view.
 
   Options:
-    -o          open the rendered file
-    -h          display this help message
-EOF
-	exit $exit_code
-}
+    -f, --output <file>     write to <file>
+    -o, --open              open the rendered file
+    -v, --verbose           be verbose
+    -h, --help              display this help text and exit\
 
-# If verbose, log an event.
-_log() {
-    # if not verbose (i.e. $VERBOSE is empty), do nothing
-    test -z $VERBOSE && return
-    $LOGGER "$LOG_PRE: $1"
-}
+If --open is specified without --output <file>, the image is rendered to a
+temporary file.\
+"
 
-# Log an error. If given a 2nd argument, exit with it as the exit code.
-_error() {
-    $LOGGER "$LOG_PRE: error: $1" >&$STDERR
-    if [[ $2 ]]; then
-        exit $2
-    fi
-}
+while getopts_long :vhof: opt \
+    verbose 0 \
+    help 0 \
+    open 0 \
+    output 1 \
+    "" "$@"
+do
+    case "$opt" in
+        v|verbose) _VERBOSE=$(($_VERBOSE + 1)) ;;
+        h|help) _print_usage 0 ;;
+        :) _err "$OPTLERR"; _print_usage 1 ;;
 
-while getopts ":ho" opt; do
-    case $opt in
-        h) _usage 0 ;;
-        o) open_file=true ;;
-		*) _error "-$OPTARG is not a valid option" ; usage 1 ;;
+        o|open) _open_after=true ;;
+        f|output) outfile="$OPTLARG" ;;
     esac
 done
-shift $((OPTIND-1))
-
-
+shift $((OPTLIND-1))
 
 if [[ $# != 1 ]]; then
-    _error "expected exactly 1 argument" 2
+    _err "expected exactly 1 argument" 2
 fi
 
-outfile=$(mktemp --suffix=".$fmt")
-dot "$1" -T "$fmt" -o "$outfile"
+infile="$1"
+if [[ ! -f "$infile" ]]; then
+	_err "not a file: $infile" 3
+fi
 
-$FILE_OPENER "$outfile"
+if [[ ! "$outfile" ]]; then
+    if [[ $_open_after ]]; then
+        # no output file & opening: use temporary file
+        outfile="$(mktemp --suffix=".$fmt")"
+    else
+        # render next to file
+        outfile="${infile%.*}.$fmt"
+    fi
+fi
+
+
+
+$dot_renderer "$infile" -T "$fmt" -o "$outfile"
+
+if [[ $? != 0 ]]; then
+    _err "dot failed (see above)" 4
+fi
+
+if [[ $_open_after ]]; then
+    $FILE_OPENER "$outfile"
+fi
