@@ -17,7 +17,7 @@ Render a DOT file to a PNG & optionally view.
     -f, --output <file>     write to <file>
     -o, --open              open the rendered file
     -v, --verbose           be verbose
-    -h, --help              display this help text and exit\
+    -h, --help              display this help text and exit
 
 If --open is specified without --output <file>, the image is rendered to a
 temporary file.\
