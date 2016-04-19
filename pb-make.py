@@ -50,7 +50,7 @@ parser = ArgumentParserUsage(description="Description of the program's function 
 # add arguments
 parser.add_argument("-d", "--description", help="prediction statement (what you think will/won't happen)",
                     action="store", required=True)
-parser.add_argument("-e", "--deadline", help="when you'll know the prediction's outcome as a sentence or date(e.g. %Y-%M-%D [at %H:%M], tomorrow etc.)",
+parser.add_argument("-e", "--deadline", help="when you'll know the prediction's outcome as a sentence or date(e.g. %%Y-%%M-%%D [at %%H:%%M], tomorrow etc.)",
                     action="store", required=True)
 parser.add_argument("-c", "--probability", help="your estimate of your prediction occurring, as a percentage (e.g. 1, 10, 100)",
                     action="store", required=True)
