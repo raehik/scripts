@@ -7,7 +7,7 @@
 target_dir="$HOME/bin"
 
 # relative to $HOME
-relative_source_dir="projects/coding/scripts"
+relative_source_dir="proj/coding/scripts"
 
 if [[ ! -e "$target_dir" ]]; then
     mkdir "$target_dir"
@@ -24,5 +24,6 @@ for script in *; do
         "${0##*/}") continue ;;
     esac
 
+    #rm -v "$target_dir/$script"
     ln -s "../$relative_source_dir/$script" "$target_dir"
 done
