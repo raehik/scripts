@@ -4,8 +4,8 @@
 #
 
 main_output="eDP1"
-extra_output="VGA1"
-location="--right-of"
+extra_output="HDMI1"
+location="--left-of"
 
 case "$1" in
     on)
