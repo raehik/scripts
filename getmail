@@ -13,6 +13,10 @@ while true; do
     # run offlineimap just once
     offlineimap -o &> "$HOME/.offlineimap/log"
 
+    # filter email, do stuff with certain emails
+    save-receipts-deliveroo.py "$mail_dir/$new_box/new"
+    save-receipts-deliveroo.py "$mail_dir/$new_box/cur"
+
     # get number of new emails
     new_mails_num=$(find "$new_mail_dir" -type f | wc -l)
 
@@ -28,7 +32,6 @@ while true; do
         #    procmail -p < "$file"
         #done
     fi
-
 
     # wait for a while
     sleep $interval
