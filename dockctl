@@ -5,7 +5,7 @@
 
 main_output="eDP1"
 extra_output="HDMI1"
-location="--left-of"
+location="--right-of"
 
 case "$1" in
     on)
