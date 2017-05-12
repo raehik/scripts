@@ -6,16 +6,15 @@
 _BASHPLATE_DIR="$HOME/.local/share/bashplate"
 source "$_BASHPLATE_DIR/bashplate.sh"
 
-device="/dev/disk/by-uuid/D057-2F0C"
-mount_dir="/mnt/mp3"
+mount_dir="/mnt-set/mp3-sd"
 rec_dir="record"
 out_prefix="$(date +%F)-"
 out_ext="ogg"
 outdir="$HOME/media/recordings"
 
-ERR_ARGS=1
-ERR_DEVICE=2
-ERR_SCROBBLER=3
+ERR_ARGS=2
+ERR_DEVICE=3
+ERR_SCROBBLER=4
 
 # Print usage and exit depending on given exit code.
 _usage="\
@@ -27,29 +26,32 @@ Move recordings and change filenames to useful descriptors.
     -h, --help      display this help text and exit\
 "
 
+## Mount/umount functions {{{
 # Try to mount device.
 mount_device() {
-    sudo mount "$device" "$mount_dir" -o uid=$(id -u),gid=$(id -g),utf8
+    _log "trying to mount ${mount_dir}..."
+    mount "$mount_dir"
 
     # tell how it went
     if [[ $? == 0 ]]; then
         _log "mounted succesfully"
     else
-        _err "could not mount device $device at mount point $mount_dir" $ERR_DEVICE
+        _err "could not mount directory ${mount_dir}: is the device plugged in?" $ERR_DEVICE
     fi
 }
 
 # Try to unmount device.
 umount_device() {
-    sudo umount "$device"
+    umount "$mount_dir"
 
     # tell how it went
     if [[ $? == 0 ]]; then
         _log "unmounted successfully"
     else
-        _err "could not unmount $device" $ERR_DEVICE
+        _err "could not unmount directory $mount_dir" $ERR_DEVICE
     fi
 }
+## }}}
 
 while getopts_long :vh opt \
     verbose 0 \
@@ -66,12 +68,6 @@ shift $((OPTLIND-1))
 
 require_args $# 0
 
-# else try to mount & submit
-if [[ ! -L "$device" ]]; then
-    _err "device not present" $ERR_DEVICE
-fi
-
-_log "device found, mounting..."
 mount_device
 
 shopt -s nullglob
