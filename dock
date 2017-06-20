@@ -46,7 +46,7 @@ dock_on() {
     xrandr --output $out_extra --auto $extra_loc $out_main
     if [[ $opt_net ]]; then
         sudo systemctl stop netctl-auto@$wlan_interface
-        sudo systemctl start dhcpcd
+        sudo systemctl restart dhcpcd
     fi
 }
 
@@ -54,7 +54,7 @@ dock_off() {
     xrandr --output $out_extra --off
     if [[ $opt_net ]]; then
         sudo systemctl stop dhcpcd
-        sudo systemctl start netctl-auto@$wlan_interface
+        sudo systemctl restart netctl-auto@$wlan_interface
     fi
 }
 
