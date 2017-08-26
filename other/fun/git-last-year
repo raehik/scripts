@@ -3,7 +3,18 @@
 # Short description of the program/script's operation/function.
 #
 
-repo_list="$HOME/journal $HOME/blog $HOME/wiki $HOME/proj/coding/scripts $HOME/proj/configfiles/dotfiles"
+repo_list="
+$HOME/journal
+$HOME/blog
+$HOME/wiki
+$HOME/proj/coding/scripts
+$HOME/proj/configfiles/dotfiles
+$HOME/proj/coding/programs/pkg-install
+$HOME/proj/coding/programs/mp3ctl
+$HOME/proj/coding/programs/musctl
+$HOME/proj/coding/programs/pyplater
+$HOME/proj/coding/programs/jctl"
+
 num_of_years_to_check=3
 
 print_intro_text() {
