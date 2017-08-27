@@ -5,7 +5,7 @@
 #
 
 #driver="rtl8723be"
-interface="wlp4s0"
+interface="wlan0"
 #current_profile="$(netctl list | grep "^\*" | cut -d ' ' -f 2)"
 
 #sudo modprobe -r "$driver" && sudo modprobe "$driver" && sudo netctl restart "$current_profile"
