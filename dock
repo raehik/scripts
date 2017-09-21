@@ -6,7 +6,7 @@
 wlan_interface="wlp4s0"
 out_main="eDP1"
 out_extra="HDMI1"
-extra_loc="--right-of"
+extra_loc="--left-of"
 
 _BASHPLATE_DIR="$HOME/.local/share/bashplate"
 source "$_BASHPLATE_DIR/bashplate.sh"
@@ -70,4 +70,5 @@ else
     _err "unknown command" 2
 fi
 
-"$HOME/.assets/backgrounds/set-desktop-background"
+# reset background because it can glitch out
+"$HOME"/.assets/backgrounds/set-desktop-background
