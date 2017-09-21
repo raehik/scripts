@@ -3,7 +3,8 @@
 # Dock/undock from my workstation.
 #
 
-wlan_interface="wlp4s0"
+wlan_interface="wlan0"
+eth_profile="general-eth-static"
 out_main="eDP1"
 out_extra="HDMI1"
 extra_loc="--left-of"
@@ -46,14 +47,14 @@ dock_on() {
     xrandr --output $out_extra --auto $extra_loc $out_main
     if [[ $opt_net ]]; then
         sudo systemctl stop netctl-auto@$wlan_interface
-        sudo systemctl restart dhcpcd
+        sudo netctl restart "$eth_profile"
     fi
 }
 
 dock_off() {
     xrandr --output $out_extra --off
     if [[ $opt_net ]]; then
-        sudo systemctl stop dhcpcd
+        sudo netctl stop "$eth_profile"
         sudo systemctl restart netctl-auto@$wlan_interface
     fi
 }
