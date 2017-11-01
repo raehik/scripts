@@ -9,7 +9,7 @@ _error() {
 }
 
 _render_md() {
-    markdown-render -o "$1"
+    markdown-render.py -b "$1"
 }
 
 _render_tex() {
