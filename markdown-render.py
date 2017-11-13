@@ -11,9 +11,26 @@ import tempfile
 import base64
 import mistune
 from bs4 import BeautifulSoup
+import pygments
+import pygments.lexers
+import pygments.formatters.html
+
+class HighlightRenderer(mistune.Renderer):
+    def block_code(self, code, lang):
+        if lang:
+            try:
+                lexer = pygments.lexers.get_lexer_by_name(lang, stripall=True)
+                formatter = pygments.formatters.html.HtmlFormatter()
+                return pygments.highlight(code, lexer, formatter)
+            except pygments.util.ClassNotFound:
+                pass
+        return '\n<pre><code>%s</code></pre>\n' % mistune.escape(code)
 
 class RendererMarkdown:
     BROWSER = "firefox"
+
+    def __init__(self):
+        self.renderer = mistune.Markdown(renderer=HighlightRenderer())
 
     def __init_logging(self):
         self.logger = logging.getLogger(os.path.basename(sys.argv[0]))
@@ -77,7 +94,7 @@ class RendererMarkdown:
         return subprocess.run(args).returncode
 
     def render_md(self, markup):
-        return mistune.markdown(markup).rstrip()
+        return self.renderer(markup).rstrip()
 
     def main(self):
         """Main entrypoint after program setup."""
@@ -134,7 +151,6 @@ class RendererMarkdown:
             self.get_shell([RendererMarkdown.BROWSER, self.args.outfile])
         else:
             print(page)
-        print(self.args.css_file)
 
 if __name__ == "__main__":
     program = RendererMarkdown()
