@@ -138,7 +138,8 @@ class RendererMarkdown:
 """.format(title=self.args.title, favicon=part_favicon, css=part_css, content=rendered_markup)
 
         soup = BeautifulSoup(page, "lxml")
-        page = soup.prettify()
+        #page = soup.prettify()
+        page = str(soup)
 
         # write to file/print to stdout/open in browser
         if self.args.browser_open:
