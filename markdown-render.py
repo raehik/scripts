@@ -141,17 +141,20 @@ class RendererMarkdown:
         #page = soup.prettify()
         page = str(soup)
 
-        # write to file/print to stdout/open in browser
+        # special case: --browser-open with no output file: use temp file
         if self.args.browser_open:
             if not self.args.outfile:
                 _, self.args.outfile = tempfile.mkstemp(prefix="markdown-render-", suffix=".html")
+
+        # write to file/print to stdout/open in browser
         if self.args.outfile:
             outfile = open(self.args.outfile, "w")
             outfile.write(page + "\n")
             outfile.close()
-            self.get_shell([RendererMarkdown.BROWSER, self.args.outfile])
         else:
             print(page)
+        if self.args.browser_open:
+            self.get_shell([RendererMarkdown.BROWSER, self.args.outfile])
 
 if __name__ == "__main__":
     program = RendererMarkdown()
