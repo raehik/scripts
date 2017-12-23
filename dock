@@ -7,7 +7,7 @@ wlan_interface="wlan0"
 eth_profile="general-eth-static"
 out_main="eDP1"
 out_extra="HDMI1"
-extra_loc="--left-of"
+extra_loc="--right-of"
 
 _BASHPLATE_DIR="$HOME/.local/share/bashplate"
 source "$_BASHPLATE_DIR/bashplate.sh"
