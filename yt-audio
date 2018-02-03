@@ -1,12 +1,17 @@
 #!/usr/bin/env bash
 #
-# Short description of the program/script's operation/function.
+# Reencodes a file containing music to OGG at quality 5, removing any video or
+# attached images.
 #
+# As of 2018-02-03, this is considered my standard for reencoding, whether
+# from lossless or lossy sources.
+#
+# Please see my wiki page "Music" for a discussion on why quality 5 was chosen.
 
 infile="$1"
 
 format="ogg"
-quality="6" # 3-6 suggested, let's go with 6
+quality="5"
 outfile="${1%.*}.${format}"
 
 ffmpeg -i "$infile" -vn -q:a $quality "$outfile"
