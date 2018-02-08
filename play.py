@@ -17,7 +17,7 @@ class PlayPy:
             "tome4": {"name": "Tales of Maj'Eyal", "cmd": ["tome4"]},
             "pokemon-emerald-jp": {"name": "Pokemon Emerald (JP)", "cmd": ["retroarch","-L",retroarch_cores_dir+"/vbam_libretro.so",games_dir+"/gba/official/Pocket Monsters - Emerald (Japan).gba"]}
         }
-        self.workspace_num = "9"
+        self.workspace_num = "10"
 
     def __init_logging(self):
         self.logger = logging.getLogger(os.path.basename(sys.argv[0]))
@@ -66,15 +66,22 @@ class PlayPy:
         self.logger.info("game cmd: {}".format(" ".join(game["cmd"])))
         self.start_game(game)
 
+    def switch_workspace(self, workspace_num):
+        """Switch i3 workspace to the given worksapce."""
+        cmd_switch_workspace = ["i3-msg", "workspace", workspace_num]
+        get_shell(cmd_switch_workspace)
+
+    def run_game_cmd(self, cmd):
+        """Run a shell command to start a game and detach."""
+        run_shell_detached(cmd)
+        # alternative: don't detach, return return code
+        # maybe useful as a switch
+        #return drop_to_shell(cmd)
+
     def start_game(self, game):
         """Start a game."""
-        cmd_switch_workspace = ["i3-msg","workspace",self.workspace_num]
-
-        run_shell_interactive(cmd_switch_workspace)
-        DEVNULL = open(os.devnull, "wb")
-        cmd = subprocess.Popen(game["cmd"], stdout=DEVNULL, stderr=DEVNULL)
-        DEVNULL.close()
-        sys.exit(cmd.returncode)
+        self.switch_workspace(self.workspace_num)
+        self.run_game_cmd(game["cmd"])
 
 if __name__ == "__main__":
     program = PlayPy()
