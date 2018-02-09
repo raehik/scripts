@@ -71,6 +71,14 @@ class PlayPy:
         cmd_switch_workspace = ["i3-msg", "workspace", workspace_num]
         get_shell(cmd_switch_workspace)
 
+    def float_game_window(self):
+        """Float the game window (i3)."""
+        cmd_float_window = ["i3-msg", "floating", "enable"]
+
+        # sleep for a bit first to wait for the window to come up
+        get_shell(["sleep", "1"])
+        get_shell(cmd_float_window)
+
     def run_game_cmd(self, cmd):
         """Run a shell command to start a game and detach."""
         run_shell_detached(cmd)
@@ -82,6 +90,7 @@ class PlayPy:
         """Start a game."""
         self.switch_workspace(self.workspace_num)
         self.run_game_cmd(game["cmd"])
+        self.float_game_window()
 
 if __name__ == "__main__":
     program = PlayPy()
