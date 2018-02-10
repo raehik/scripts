@@ -7,7 +7,8 @@
 #   * twitter (NOT python-twitter, aka Python Twitter Tools)
 #
 
-import sys, os, argparse, subprocess, logging
+import raehutils
+import sys, os, argparse, logging
 
 # twitter requires a json module
 # simplejson is updated more and may be faster
@@ -15,55 +16,15 @@ import sys, os, argparse, subprocess, logging
 import simplejson
 import twitter
 
-class Twitterminal:
+class Twitterminal(raehutils.RaehBaseClass):
     CREDS_FILE = os.getenv('HOME')+"/.twitterminal_creds"
     APP_CREDS_FILE = os.getenv('HOME')+"/.twitterminal_appcreds"
 
     ERR_ARGS = 1
     ERR_OAUTH = 2
 
-    ## CLI-related {{{
-    def __init_logging(self):
-        self.logger = logging.getLogger(os.path.basename(sys.argv[0]))
-        lh = logging.StreamHandler()
-        lh.setFormatter(logging.Formatter("%(name)s: %(levelname)s: %(message)s"))
-        self.logger.addHandler(lh)
-
-    def __parse_args(self):
-        self.parser = argparse.ArgumentParser(description="Tweet from the shell.")
-        self.parser.add_argument("-v", "--verbose", help="be verbose", action="count", default=0)
-        self.parser.add_argument("-q", "--quiet", help="be quiet (overrides -v)", action="count", default=0)
-        self.parser.add_argument("message", help="text to tweet")
-
-        self.args = self.parser.parse_args()
-        if self.args.verbose == 0:
-            self.logger.setLevel(logging.INFO)
-        elif self.args.verbose >= 1:
-            self.logger.setLevel(logging.DEBUG)
-        if self.args.quiet >= 1:
-            self.logger.setLevel(logging.NOTSET)
-
-        if len(self.args.message) == 0:
-            exit("message needs to be longer than 0 characters", ERR_ARGS)
-
-    def run(self):
-        """Run from CLI: parse arguments, try to tweet."""
-        self.__init_logging()
-        self.__parse_args()
-        self.tweet(self.args.message)
-    ## }}}
-
     def __init__(self):
         self.__init_client()
-
-    def exit(self, msg, ret):
-        """Exit with explanation."""
-        self.logger.error(msg)
-        sys.exit(ret)
-
-    def get_shell(self, args):
-        """Run a shell command and return the exit code."""
-        return subprocess.run(args).returncode
 
     def __init_client(self):
         """Initialise the Twitter client."""
@@ -81,6 +42,24 @@ class Twitterminal:
         self.client = twitter.Twitter(auth=twitter.OAuth(oauth_token,
             oauth_secret, api_tokens[0], api_tokens[1]))
 
+    ## CLI-related {{{
+    def _parse_args(self):
+        self.parser = argparse.ArgumentParser(description="Tweet from the shell.")
+        self.parser.add_argument("-v", "--verbose", help="be verbose", action="count", default=0)
+        self.parser.add_argument("-q", "--quiet", help="be quiet (overrides -v)", action="count", default=0)
+        self.parser.add_argument("message", help="text to tweet")
+
+        self.args = self.parser.parse_args()
+
+        self._parse_verbosity()
+
+        if len(self.args.message) == 0:
+            exit("message needs to be longer than 0 characters", ERR_ARGS)
+    ## }}}
+
+    def main(self):
+        """Main entrypoint after program initialisation."""
+        self.tweet(self.args.message)
 
     def tweet(self, msg):
         """Tweet a message."""

@@ -5,8 +5,9 @@
 # Requires mistune.
 #
 
+import raehutils
 import sys, os, argparse, logging
-import subprocess
+
 import tempfile
 import base64
 import mistune
@@ -26,19 +27,13 @@ class HighlightRenderer(mistune.Renderer):
                 pass
         return '\n<pre><code>%s</code></pre>\n' % mistune.escape(code)
 
-class RendererMarkdown:
-    BROWSER = "firefox"
-
+class RendererMarkdown(raehutils.RaehBaseClass):
     def __init__(self):
+        self.browser = "firefox"
         self.renderer = mistune.Markdown(renderer=HighlightRenderer())
 
-    def __init_logging(self):
-        self.logger = logging.getLogger(os.path.basename(sys.argv[0]))
-        lh = logging.StreamHandler()
-        lh.setFormatter(logging.Formatter("%(name)s: %(levelname)s: %(message)s"))
-        self.logger.addHandler(lh)
-
-    def __parse_args(self):
+    ## CLI-related {{{
+    def _parse_args(self):
         self.parser = argparse.ArgumentParser(
                 description="Render Markdown to HTML and place it inside an HTML file.",
                 epilog="--browser-open requires --outfile. If it isn't present, the output is saved to a temporary file. You can specify multiple CSS files to attach by using multiple --css-file arguments.")
@@ -63,12 +58,8 @@ class RendererMarkdown:
                 help="Markdown files to concatenate & render")
 
         self.args = self.parser.parse_args()
-        if self.args.verbose == 1:
-            self.logger.setLevel(logging.INFO)
-        elif self.args.verbose >= 2:
-            self.logger.setLevel(logging.DEBUG)
-        if self.args.quiet >= 1:
-            self.logger.setLevel(logging.NOTSET)
+
+        self._parse_verbosity()
 
         # if no title set, use a default
         if not self.args.title:
@@ -77,21 +68,7 @@ class RendererMarkdown:
                 self.args.title = os.path.basename(self.args.files[0])
             else:
                 self.args.title = "Rendered Markdown file"
-
-    def run(self):
-        """Run from CLI: parse arguments, run main."""
-        self.__init_logging()
-        self.__parse_args()
-        self.main()
-
-    def exit(self, msg, ret):
-        """Exit with explanation."""
-        self.logger.error(msg)
-        sys.exit(ret)
-
-    def get_shell(self, args):
-        """Run a shell command and return the exit code."""
-        return subprocess.run(args).returncode
+    ## }}}
 
     def render_md(self, markup):
         return self.renderer(markup).rstrip()

@@ -3,12 +3,13 @@
 # Create backgrounds for applications.
 #
 
+import raehutils
 import sys, os, argparse, logging
-import subprocess
+
 import random
 import glob
 
-class BGCycler:
+class BGCycler(raehutils.RaehBaseClass):
     BACKGROUNDS = ["desktop", "grub"]
     VALID_IMG_EXTS = ["png", "jpg"]
     GRUB_BG_IMG = "/boot/grub/background-image.png"
@@ -21,13 +22,8 @@ class BGCycler:
 
     ERR_IMG_CONVERSION = 1
 
-    def __init_logging(self):
-        self.logger = logging.getLogger(os.path.basename(sys.argv[0]))
-        lh = logging.StreamHandler()
-        lh.setFormatter(logging.Formatter("%(name)s: %(levelname)s: %(message)s"))
-        self.logger.addHandler(lh)
-
-    def __parse_args(self):
+    ## CLI-related {{{
+    def _parse_args(self):
         self.parser = argparse.ArgumentParser(
                 description="Create backgrounds for applications.",
                 epilog="I use a rule of contrast = brightness-10 for a nice image.")
@@ -52,44 +48,49 @@ class BGCycler:
                 help="images to use (instead of picking randomly)")
 
         self.args = self.parser.parse_args()
-        if self.args.verbose == 0:
-            self.logger.setLevel(logging.INFO)
-        elif self.args.verbose >= 1:
-            self.logger.setLevel(logging.DEBUG)
-        if self.args.quiet >= 1:
-            self.logger.setLevel(logging.NOTSET)
 
-    def run(self):
-        """Run from CLI: parse arguments, run main."""
-        self.__init_logging()
-        self.__parse_args()
-        self.main()
+        self.args.verbose += 1 # force some verbosity
+        self._parse_verbosity()
+    ## }}}
 
-    def exit(self, msg, ret):
-        """Exit with explanation."""
-        self.logger.error(msg)
-        sys.exit(ret)
+    def main(self):
+        """Main entrypoint after program setup."""
+        imgs = self.get_shuffled_images(self.args.bg_dir)
 
-    def get_shell(self, args):
-        """Run a shell command and return the exit code."""
-        return subprocess.run(args).returncode
+        if len(BGCycler.BACKGROUNDS) > len(imgs):
+            self.fail("not enough images for the backgrounds required", BGCycler.ERR_IMG_CONVERSION)
 
-    def convert_image(self, img, img_converted, brightness, contrast, width="0", height="0"):
-        ret = 0
-        if width == "0" or height == "0":
-            ret = self.get_shell([
-                "convert", img,
-                "-brightness-contrast", "{}x{}".format(brightness, contrast),
-                img_converted])
-        else:
-            ret = self.get_shell([
-                "convert", img,
-                "-brightness-contrast", "{}x{}".format(brightness, contrast),
-                "-crop", "{}x{}+0+0".format(width, height),
-                "-gravity", "center",
-                img_converted])
-        if ret != 0:
-            self.exit("couldn't convert image {}".format(img), BGCycler.ERR_IMG_CONVERSION)
+        for bg, img in zip(BGCycler.BACKGROUNDS, imgs):
+            # get outfile
+            img_converted = os.path.join(
+                self.args.bg_dir,
+                "converted",
+                os.path.basename(os.path.splitext(img)[0]) + ".png")
+
+            # convert
+            self.logger.info(os.path.basename(img))
+            if bg == "grub":
+                # special override: resize, copy to GRUB background image
+                self.convert_image(img, img_converted, self.args.brightness,
+                    self.args.contrast, self.args.width, self.args.height)
+                raehutils.drop_to_shell(["sudo", "cp", img_converted, BGCycler.GRUB_BG_IMG])
+            else:
+                self.convert_image(img, img_converted, self.args.brightness,
+                    self.args.contrast)
+
+            # make symlink
+            bg_out_symlink = os.path.join(self.args.bg_dir, bg)
+            try:
+                # remove symlink if it already exists
+                os.remove(bg_out_symlink)
+            except FileNotFoundError:
+                pass
+            os.symlink(
+                os.path.join("converted", os.path.basename(img_converted)),
+                bg_out_symlink)
+
+        # now set the background
+        raehutils.drop_to_shell([os.path.join(self.args.bg_dir, "set-desktop-background")])
 
     def get_shuffled_images(self, d):
         """Fills an array with images in a specified directory, shuffles it,
@@ -114,44 +115,20 @@ class BGCycler:
                     imgs.insert(0, os.path.join(d, "original", img))
         return imgs
 
-    def main(self):
-        """Main entrypoint after program setup."""
-        imgs = self.get_shuffled_images(self.args.bg_dir)
-
-        if len(BGCycler.BACKGROUNDS) > len(imgs):
-            self.exit("not enough images for the backgrounds required", BGCycler.ERR_IMG_CONVERSION)
-
-        for bg, img in zip(BGCycler.BACKGROUNDS, imgs):
-            # get outfile
-            img_converted = os.path.join(
-                self.args.bg_dir,
-                "converted",
-                os.path.basename(os.path.splitext(img)[0]) + ".png")
-
-            # convert
-            self.logger.info(os.path.basename(img))
-            if bg == "grub":
-                # special override: resize, copy to GRUB background image
-                self.convert_image(img, img_converted, self.args.brightness,
-                    self.args.contrast, self.args.width, self.args.height)
-                self.get_shell(["sudo", "cp", img_converted, BGCycler.GRUB_BG_IMG])
-            else:
-                self.convert_image(img, img_converted, self.args.brightness,
-                    self.args.contrast)
-
-            # make symlink
-            bg_out_symlink = os.path.join(self.args.bg_dir, bg)
-            try:
-                # remove symlink if it already exists
-                os.remove(bg_out_symlink)
-            except FileNotFoundError:
-                pass
-            os.symlink(
-                os.path.join("converted", os.path.basename(img_converted)),
-                bg_out_symlink)
-
-        # now set the background
-        self.get_shell([os.path.join(self.args.bg_dir, "set-desktop-background")])
+    def convert_image(self, img, img_converted, brightness, contrast, width="0", height="0"):
+        cmd_convert_img = [
+                "convert", img,
+                "-brightness-contrast", "{}x{}".format(brightness, contrast)]
+        if width == "0" or height == "0":
+            pass
+        else:
+            cmd_convert_img += [
+                    "-crop", "{}x{}+0+0".format(width, height),
+                    "-gravity", "center"]
+        cmd_convert_img.append(img_converted)
+        ret = raehutils.drop_to_shell(cmd_convert_img)
+        if ret != 0:
+            self.fail("couldn't convert image {}".format(img), BGCycler.ERR_IMG_CONVERSION)
 
 if __name__ == "__main__":
     program = BGCycler()
