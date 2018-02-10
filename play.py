@@ -4,7 +4,7 @@
 #
 
 import raehutils
-import sys, os, argparse
+import sys, os, argparse, logging
 
 class PlayPy(raehutils.RaehBaseClass):
     ERR_MATCH = 1
@@ -28,6 +28,7 @@ class PlayPy(raehutils.RaehBaseClass):
         self.parser.add_argument("game", help="unique string of game to play")
 
         self.args = self.parser.parse_args()
+
         self._parse_verbosity()
     ## }}}
 
