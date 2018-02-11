@@ -14,8 +14,18 @@ class PlayPy(raehutils.RaehBaseClass):
         games_dir = os.environ.get("HOME") + "/media/games-local"
 
         self.games = {
-            "tome4": {"name": "Tales of Maj'Eyal", "cmd": ["tome4"]},
-            "pokemon-emerald-jp": {"name": "Pokemon Emerald (JP)", "cmd": ["retroarch","-L",retroarch_cores_dir+"/vbam_libretro.so",games_dir+"/gba/official/Pocket Monsters - Emerald (Japan).gba"]}
+            "tome4": {
+                "name": "Tales of Maj'Eyal",
+                "cmd": ["tome4"]
+            },
+            "pokemon-emerald-jp": {
+                "name": "Pokemon Emerald (JP)",
+                "cmd": ["retroarch","-L",retroarch_cores_dir+"/vbam_libretro.so",games_dir+"/gba/official/Pocket Monsters - Emerald (Japan).gba"]
+            },
+            "melee": {
+                "name": "Super Smash Bros. Melee (20XX)",
+                "cmd": [os.environ.get("HOME")+"/media/games-etc/platforms/pc/emulators/wii/faster-melee-v5.7/bin/dolphin-emu"]
+            },
         }
 
         self.workspace_num = "10"
@@ -51,7 +61,7 @@ class PlayPy(raehutils.RaehBaseClass):
         """Start a game."""
         self.switch_workspace(self.workspace_num)
         self.run_game_cmd(game["cmd"])
-        self.float_game_window()
+        #self.float_game_window()
 
     def switch_workspace(self, workspace_num):
         """Switch i3 workspace to the given worksapce."""
