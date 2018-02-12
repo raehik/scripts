@@ -131,7 +131,7 @@ class RendererMarkdown(raehutils.RaehBaseClass):
         else:
             print(page)
         if self.args.browser_open:
-            self.get_shell([RendererMarkdown.BROWSER, self.args.outfile])
+            raehutils.get_shell([self.browser, self.args.outfile])
 
 if __name__ == "__main__":
     program = RendererMarkdown()
