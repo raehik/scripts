@@ -26,6 +26,10 @@ class PlayPy(raehutils.RaehBaseClass):
                 "name": "Super Smash Bros. Melee (20XX)",
                 "cmd": [os.environ.get("HOME")+"/media/games-etc/platforms/pc/emulators/wii/faster-melee-v5.7/bin/dolphin-emu"]
             },
+            "melee-netplay": {
+                "name": "Super Smash Bros. Melee [USA/Netplay]",
+                "cmd": [os.environ.get("HOME")+"/media/games-etc/platforms/pc/emulators/wii/faster-melee-v5.7-fresh/bin/dolphin-emu"]
+            },
         }
 
         self.workspace_num = "10"
@@ -47,10 +51,15 @@ class PlayPy(raehutils.RaehBaseClass):
         # get all possible matches
         matches = [k for k, v in self.games.items() if k.startswith(self.args.game)]
 
-        if len(matches) > 1:
-            self.fail("query matches multiple games: {}".format(", ".join(matches), PlayPy.ERR_MATCH))
-        elif len(matches) < 1:
+        if len(matches) < 1:
             self.fail("no matching games for query: {}".format(self.args.game), PlayPy.ERR_MATCH)
+        if len(matches) > 1:
+            # if we found an exact match, override
+            exact_match = list(filter(lambda x: x == self.args.game, matches))
+            if len(exact_match) == 1:
+                matches = exact_match
+            else:
+                self.fail("query matches multiple games with no exact match: {}".format(", ".join(matches), PlayPy.ERR_MATCH))
 
         game = self.games[matches[0]]
         self.logger.info("matched game: {}".format(game["name"]))
