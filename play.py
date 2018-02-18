@@ -77,6 +77,9 @@ class PlayPy(raehutils.RaehBaseClass):
         cmd_switch_workspace = ["i3-msg", "workspace", workspace_num]
         raehutils.get_shell(cmd_switch_workspace)
 
+        # sleep a TINY bit (Dolphin comes up before we switch, somehow??)
+        raehutils.get_shell(["sleep", "0.1"])
+
     def float_game_window(self):
         """Float the game window (i3)."""
         cmd_float_window = ["i3-msg", "floating", "enable"]
