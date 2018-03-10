@@ -24,11 +24,11 @@ class PlayPy(raehutils.RaehBaseClass):
             },
             "melee": {
                 "name": "Super Smash Bros. Melee (20XX)",
-                "cmd": [os.environ.get("HOME")+"/media/games-etc/platforms/pc/emulators/wii/faster-melee-v5.7/bin/dolphin-emu"]
+                "cmd": [os.environ.get("HOME")+"/media/games-etc/platforms/pc/emulators/wii/faster-melee-v5.7/dolphin-emu"]
             },
             "melee-netplay": {
                 "name": "Super Smash Bros. Melee [USA/Netplay]",
-                "cmd": [os.environ.get("HOME")+"/media/games-etc/platforms/pc/emulators/wii/faster-melee-v5.7-fresh/bin/dolphin-emu"]
+                "cmd": [os.environ.get("HOME")+"/media/games-etc/platforms/pc/emulators/wii/faster-melee-v5.7-fresh/dolphin-emu"]
             },
         }
 
