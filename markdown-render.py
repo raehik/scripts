@@ -5,6 +5,8 @@
 # Requires mistune.
 #
 
+# TODO: 2018-03-04: maybe replace mistune, it seems broken
+
 import raehutils
 import sys, os, argparse, logging
 
