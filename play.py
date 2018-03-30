@@ -24,11 +24,11 @@ class PlayPy(raehutils.RaehBaseClass):
             },
             "melee": {
                 "name": "Super Smash Bros. Melee (20XX)",
-                "cmd": [os.environ.get("HOME")+"/media/games-etc/platforms/pc/emulators/wii/faster-melee-v5.7/dolphin-emu"]
+                "cmd": [os.environ.get("HOME")+"/media/games-etc/platforms/pc/emulators/wii/faster-melee-v5.8.7/dolphin-emu"]
             },
             "melee-netplay": {
                 "name": "Super Smash Bros. Melee [USA/Netplay]",
-                "cmd": [os.environ.get("HOME")+"/media/games-etc/platforms/pc/emulators/wii/faster-melee-v5.7-fresh/dolphin-emu"]
+                "cmd": [os.environ.get("HOME")+"/media/games-etc/platforms/pc/emulators/wii/faster-melee-v5.8.7-fresh/dolphin-emu"]
             },
         }
 
@@ -78,7 +78,7 @@ class PlayPy(raehutils.RaehBaseClass):
         raehutils.get_shell(cmd_switch_workspace)
 
         # sleep a TINY bit (Dolphin comes up before we switch, somehow??)
-        raehutils.get_shell(["sleep", "0.1"])
+        #raehutils.get_shell(["sleep", "0.1"])
 
     def float_game_window(self):
         """Float the game window (i3)."""
