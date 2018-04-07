@@ -30,6 +30,18 @@ class PlayPy(raehutils.RaehBaseClass):
                 "name": "Super Smash Bros. Melee [USA/Netplay]",
                 "cmd": [os.environ.get("HOME")+"/media/games-etc/platforms/pc/emulators/wii/faster-melee-v5.8.7-fresh/dolphin-emu"]
             },
+            "retroarch": {
+                "name": "RetroArch (general)",
+                "cmd": ["retroarch"]
+            },
+            "mario-and-luigi-rpg": {
+                "name": "Mario & Luigi RPG (JP)",
+                "cmd": ["retroarch","-L",retroarch_cores_dir+"/vbam_libretro.so",games_dir+"/gba/official/mario-and-luigi-rpg-jp/1283 - Mario and Luigi RPG (J)(Rising Sun).gba"]
+            },
+            "elite-nes-pal": {
+                "name": "Elite (NES) (PAL)",
+                "cmd": ["retroarch","-L",retroarch_cores_dir+"/fceumm_libretro.so",games_dir+"/nes/official/elite/elite-pal.nes"]
+            },
         }
 
         self.workspace_num = "10"
