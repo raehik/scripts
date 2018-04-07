@@ -44,7 +44,7 @@ done
 shift $((OPTLIND-1))
 
 dock_on() {
-    xrandr --output $out_extra --auto $extra_loc $out_main
+    xrandr --output $out_extra --auto $extra_loc $out_main --set "Broadcast RGB" "Full"
     if [[ $opt_net ]]; then
         sudo systemctl stop netctl-auto@$wlan_interface
         sudo netctl restart "$eth_profile"
