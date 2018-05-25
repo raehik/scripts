@@ -23,12 +23,20 @@ class PlayPy(raehutils.RaehBaseClass):
                 "cmd": ["retroarch","-L",retroarch_cores_dir+"/vbam_libretro.so",games_dir+"/gba/official/Pocket Monsters - Emerald (Japan).gba"]
             },
             "melee": {
+                "name": "Super Smash Bros. Melee (20XX) [UFC]",
+                "cmd": [os.environ.get("HOME")+"/media/games-etc/platforms/pc/emulators/wii/faster-melee-v5.8.7-ucf-v0.73/dolphin-emu"]
+            },
+            "melee-no-ufc": {
                 "name": "Super Smash Bros. Melee (20XX)",
                 "cmd": [os.environ.get("HOME")+"/media/games-etc/platforms/pc/emulators/wii/faster-melee-v5.8.7/dolphin-emu"]
             },
-            "melee-netplay": {
-                "name": "Super Smash Bros. Melee [USA/Netplay]",
+            "melee-smashladder": {
+                "name": "Super Smash Bros. Melee [Netplay/Smashladder]",
                 "cmd": [os.environ.get("HOME")+"/media/games-etc/platforms/pc/emulators/wii/faster-melee-v5.8.7-fresh/dolphin-emu"]
+            },
+            "melee-uk-melee": {
+                "name": "Super Smash Bros. Melee [Netplay/UK Melee]",
+                "cmd": [os.environ.get("HOME")+"/media/games-etc/platforms/pc/emulators/wii/faster-melee-v5.8.7-fresh-uk-melee-ucf-v0.73/dolphin-emu"]
             },
             "retroarch": {
                 "name": "RetroArch (general)",
