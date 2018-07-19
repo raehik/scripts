@@ -32,7 +32,7 @@ class PlayPy(raehutils.RaehBaseClass):
             },
             "melee-smashladder": {
                 "name": "Super Smash Bros. Melee [Netplay/Smashladder]",
-                "cmd": [os.environ.get("HOME")+"/media/games-etc/platforms/pc/emulators/wii/faster-melee-v5.8.7-fresh/dolphin-emu"]
+                "cmd": [os.environ.get("HOME")+"/media/games-etc/platforms/pc/emulators/wii/faster-melee-v5.9-fresh/dolphin-emu"]
             },
             "melee-uk-melee": {
                 "name": "Super Smash Bros. Melee [Netplay/UK Melee]",
