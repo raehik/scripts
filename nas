@@ -6,7 +6,8 @@
 mount_cmd="sudo mount -t cifs -o uid=$(id -u),gid=$(id -g)"
 mount_dir="$HOME/media/nas"
 nas_server="NAS"
-nas_share="Ben"
+nas_share_private_share="Ben"
+nas_share_public="Public"
 nas_user="ben"
 
 mount_user() {
@@ -18,7 +19,8 @@ mount_user() {
 }
 
 mount_public() {
-    smbnetfs "$mount_dir"
+    sudo mount -t cifs "//$(nmblookup $nas_server | awk 'END{print $1}')/$nas_share_public" "$mount_dir" -o "vers=1.0,username=$(id -un),password=,uid=$(id -u),gid=$(id -g),iocharset=utf8"
+    #smbnetfs "$mount_dir"
 }
 
 umount_general() {
