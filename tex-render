@@ -3,21 +3,41 @@
 # Render a Tex file.
 #
 
+_BASHPLATE_DIR="$HOME/.local/share/bashplate"
+source "$_BASHPLATE_DIR/bashplate.sh"
+
+_usage="\
+Usage: $_FILENAME [options]
+Render a Tex file.
+
+  Options:
+    -v, --verbose       be verbose
+    -h, --help          display this help text and exit
+"
+
+while getopts_long :vhe opt \
+    verbose 0 \
+    help 0 \
+    "" "$@"
+do
+    case "$opt" in
+        v|verbose) _VERBOSE=$((_VERBOSE + 1)) ;;
+        h|help) _print_usage 0 ;;
+        :) _err "$OPTLERR"; _print_usage 1 ;;
+    esac
+done
+shift $((OPTLIND-1))
+
+if [[ $# != 1 ]]; then
+    _err "expected exactly 1 argument (got $#)" 1
+fi
+
 #renderer="pdflatex"
 #renderer_options="-shell-escape"
 
 # check ~/.latexmkrc for options
 renderer="latexmk"
 renderer_options=""
-
-error() {
-    echo "${0##*/}: error: $1"
-    exit 1
-}
-
-if [[ $# != 1 ]]; then
-    error "expected exactly 1 argument"
-fi
 
 build_dir="build"
 bin_dir="bin"
