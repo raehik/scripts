@@ -6,4 +6,4 @@
 i3_conf_dir="$HOME/.config/i3"
 lock_img="lockscreen.png"
 
-i3lock -utI 0 -i "$i3_conf_dir/$lock_img"
+i3lock -ut -c 292b2e
