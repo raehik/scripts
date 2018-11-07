@@ -11,7 +11,7 @@
 infile="$1"
 
 format="ogg"
-quality="5"
+quality=5
 outfile="${1%.*}.${format}"
 
 ffmpeg -i "$infile" -vn -q:a $quality "$outfile"

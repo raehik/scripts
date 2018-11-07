@@ -6,7 +6,7 @@
 wlan_interface="wlan0"
 eth_profile="general-eth-static"
 out_main="eDP1"
-out_extra="HDMI1"
+out_extra="VGA1"
 extra_loc="--right-of"
 
 _BASHPLATE_DIR="$HOME/.local/share/bashplate"
@@ -44,7 +44,8 @@ done
 shift $((OPTLIND-1))
 
 dock_on() {
-    xrandr --output $out_extra --auto $extra_loc $out_main --set "Broadcast RGB" "Full"
+    #xrandr --output $out_extra --auto $extra_loc $out_main --set "Broadcast RGB" "Full"
+    xrandr --output $out_extra --auto $extra_loc $out_main
     if [[ $opt_net ]]; then
         sudo systemctl stop netctl-auto@$wlan_interface
         sudo netctl restart "$eth_profile"
